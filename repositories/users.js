@@ -28,6 +28,7 @@ class UsersRepository {
 		const records = await this.getAll();
 		records.push(attrs);
 		await this.writeAll(records);
+		return attrs;
 	}
 
 	async writeAll(records) {
@@ -61,6 +62,7 @@ class UsersRepository {
 
 	async getOneBy(filters) {
 		const records = await this.getAll();
+
 		for (let record of records) {
 			let found = true;
 			for (let key in filters) {
@@ -68,9 +70,9 @@ class UsersRepository {
 					found = false;
 				}
 			}
-		}
-		if (found) {
-			return record;
+			if (found) {
+				return record;
+			}
 		}
 	}
 }
