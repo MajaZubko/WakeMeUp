@@ -1,9 +1,15 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator');
+
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const execSync = require('child_process').execSync;
-const layout = require('./layout');
+
+const layout = require('./views/layout');
 const usersRepo = require('./repositories/users');
+const signInTemplate = require('./views/signInTemplate');
+const signedInTemplate = require('./views/signedInTemplate');
+const { requireEmailExists, requireValidPasswordForUser } = require('./validators');
 
 const app = express();
 
@@ -16,58 +22,31 @@ app.use(
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-	res.send(
-		layout({
-			content: `
-			<div id="addLinkContainer" class="full-screen-opaque">
-			<div class="panel" id="addLinkPanel">
-				<h3 class="header">Sign in</h3>
-				<form id="authForm" method="POST">
-				<input type="email" name="email" id="email" placeholder="Email">
-					<input type="password" name="password" id="password" placeholder="Password">
-
-					<div id="addedCategories">
-
-					</div>
-
-					<input type="submit" id="submitButton" value="Submit"> 	
-
-				</form>
-			</div>
-		</div>
-
-				<form>
-					<button>Wake me up</button>
-				</form>
-			`
-		})
-	);
+	res.send(signInTemplate({ req }));
 });
 
-app.post('/', async (req, res) => {
+app.post('/', [ requireEmailExists, requireValidPasswordForUser ], async (req, res) => {
+	const errors = validationResult(req);
+	console.log(errors);
+	if (!errors.isEmpty()) {
+		return res.send(signInTemplate({ errors }));
+	}
+
 	//signup
 	// const { email, password, passwordConfirmation } = req.body;
-
 	// const existingUser = await usersRepo.getOneBy({ email });
 	// if (existingUser) {
-	// 	return res.send('Email in use');
+	// 		return res.send('Email in use');
 	// }
+	//
+	//
 	// const user = await usersRepo.create({ email, password });
 	// req.session.userId = user.id;
 	// res.redirect('/signedin');
 
 	//signin
-	const { email, password } = req.body;
+	const { email } = req.body;
 	const user = await usersRepo.getOneBy({ email });
-
-	if (!user) {
-		return res.send('Email not found');
-	}
-
-	const validPassword = await usersRepo.comparePasswords(user.password, password);
-	if (!validPassword) {
-		return res.send('Invalid password');
-	}
 
 	req.session.userId = user.id;
 
@@ -80,15 +59,7 @@ app.get('/signout', (req, res) => {
 });
 
 app.get('/signedin', (req, res) => {
-	res.send(
-		layout({
-			content: `
-				<form method="POST">
-					<button>Wake me up</button>
-				</form>
-			`
-		})
-	);
+	res.send(signedInTemplate());
 });
 
 app.post('/signedin', (req, res) => {
