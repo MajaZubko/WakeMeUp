@@ -7,7 +7,9 @@ module.exports = ({ content }) => {
             <title>Wake me up</title>
         </head>
         <body>
+            <div class="content">
             ${content}
+            </div>
         </body>
         </html>
     `;

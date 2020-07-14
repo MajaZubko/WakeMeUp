@@ -10,12 +10,16 @@
 }
 
 body {
-	height: 100vh;
-	font-size: 20px;
-	text-align: center;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	background-color: var(--blue);
 	box-sizing: border-box;
+}
+
+.content {
+	height: 50vh;
+	font-size: 20px;
+	text-align: center;
+	margin-top: 20vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -70,6 +74,17 @@ h1 {
 
 #addLinkPanel {
 	animation: slide-down 1s 0s ease-in;
+}
+
+p {
+	font-size: 0.7rem;
+}
+
+a {
+	font-size: 0.7rem;
+	color: var(--yellow);
+	text-decoration: none;
+	margin-top: 10vh;
 }
 
 @keyframes slide-down {

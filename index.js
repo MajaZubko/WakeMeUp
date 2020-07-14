@@ -10,6 +10,7 @@ const usersRepo = require('./repositories/users');
 const signInTemplate = require('./views/signInTemplate');
 const signedInTemplate = require('./views/signedInTemplate');
 const { requireEmailExists, requireValidPasswordForUser } = require('./validators');
+const { requireLoggedIn } = require('./middleware');
 
 const app = express();
 
@@ -58,11 +59,11 @@ app.get('/signout', (req, res) => {
 	res.redirect('/');
 });
 
-app.get('/signedin', (req, res) => {
+app.get('/signedin', requireLoggedIn, (req, res) => {
 	res.send(signedInTemplate());
 });
 
-app.post('/signedin', (req, res) => {
+app.post('/signedin', requireLoggedIn, (req, res) => {
 	const output = execSync('dir', { encoding: 'utf-8' });
 	console.log('Output was:\n', output);
 	res.send(
@@ -70,7 +71,8 @@ app.post('/signedin', (req, res) => {
 			content: `<h1>Now I'm woke</h1>
                     <form method="POST">
                         <button>Wake me up</button>
-                    </form>`
+					</form>
+					<a href="/signout">Sign Out</a>`
 		})
 	);
 });

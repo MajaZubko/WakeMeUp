@@ -16,9 +16,9 @@ module.exports = ({ errors }) => {
             <h3 class="header">Sign in</h3>
             <form id="authForm" method="POST">
                 <input type="email" name="email" id="email" placeholder="Email">
-                ${getError(errors, 'email')}
+                <p>${getError(errors, 'email')}</p>
                 <input type="password" name="password" id="password" placeholder="Password">
-                ${getError(errors, 'password')}
+                <p>${getError(errors, 'password')}</p>
                 <input type="submit" id="submitButton" value="Submit"> 	
 
             </form>
