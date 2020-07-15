@@ -64,7 +64,7 @@ app.get('/signedin', requireLoggedIn, (req, res) => {
 });
 
 app.post('/signedin', requireLoggedIn, (req, res) => {
-	const output = execSync('dir', { encoding: 'utf-8' });
+	const output = execSync('sudo wakeonlan MACADRESS', { encoding: 'utf-8' });
 	console.log('Output was:\n', output);
 	res.send(
 		layout({
@@ -77,6 +77,6 @@ app.post('/signedin', requireLoggedIn, (req, res) => {
 	);
 });
 
-app.listen(3000, () => {
+app.listen(4000, () => {
 	console.log('Listening');
 });
