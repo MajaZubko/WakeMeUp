@@ -37,10 +37,9 @@ app.post('/', [ requireEmailExists, requireValidPasswordForUser ], async (req, r
 	// const { email, password, passwordConfirmation } = req.body;
 	// const existingUser = await usersRepo.getOneBy({ email });
 	// if (existingUser) {
-	// 		return res.send('Email in use');
+	// 	return res.send('Email in use');
 	// }
-	//
-	//
+
 	// const user = await usersRepo.create({ email, password });
 	// req.session.userId = user.id;
 	// res.redirect('/signedin');
@@ -64,7 +63,7 @@ app.get('/signedin', requireLoggedIn, (req, res) => {
 });
 
 app.post('/signedin', requireLoggedIn, (req, res) => {
-	const output = execSync('sudo wakeonlan MACADRESS', { encoding: 'utf-8' });
+	const output = execSync('sudo wakeonlan E0:D5:5E:28:B2:30', { encoding: 'utf-8' });
 	console.log('Output was:\n', output);
 	res.send(
 		layout({
@@ -77,6 +76,6 @@ app.post('/signedin', requireLoggedIn, (req, res) => {
 	);
 });
 
-app.listen(4000, () => {
+app.listen(3000, () => {
 	console.log('Listening');
 });
